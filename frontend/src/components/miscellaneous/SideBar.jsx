@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import ChatLoading from './ChatLoading'
 import UserListItem from '../UserAvatar/UserListItem'
+import { getSender } from '../../config/ChatLogics'
+import NotificatioBadge, { Effect } from 'react-notification-badge'
 
 const SideBar = () => {
     const [search, setSearch] = useState()
@@ -15,7 +17,7 @@ const SideBar = () => {
     const [loading, setLoading] = useState(false)
     const [loadingChat, setLoadingChat] = useState(false)
 
-    const { user, chats, setChats, setSelectedChat } = ChatState()
+    const { user, chats, setChats, setSelectedChat, notification, setNotification } = ChatState()
 
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -81,7 +83,7 @@ const SideBar = () => {
             setSelectedChat(data)
             setLoadingChat(false)
             onClose()
-         
+
 
 
         } catch (error) {
@@ -130,14 +132,24 @@ const SideBar = () => {
                     <Menu
                     >
                         <MenuButton p={1} as={Button}>
+                            <NotificatioBadge
+                            count={notification.length}
+                            effect={Effect.SCALE}
+                            />
                             <BellIcon fontSize={'2xl'} m={1} />
                         </MenuButton>
                         <MenuList>
-                            <MenuItem>Download</MenuItem>
-                            <MenuItem>Create a Copy</MenuItem>
-                            <MenuItem>Mark as Draft</MenuItem>
-                            <MenuItem>Delete</MenuItem>
-                            <MenuItem>Attend a Workshop</MenuItem>
+
+                            <MenuItem> {!notification.length && "No new message"}</MenuItem>
+                            {notification.map(i => (
+                                <MenuItem onClick={()=>{
+                                    setSelectedChat(i.chat)
+                                    setNotification(notification.filter((n)=>n !== i))
+                                }} key={i._id}>{i.chat.isGroupChat ?
+                                    `New Message in ${i.chat.chatName}` :
+                                    `New Message from${getSender(user, i.chat.users)}`}</MenuItem>
+
+                            ))}
                         </MenuList>
                     </Menu>
 

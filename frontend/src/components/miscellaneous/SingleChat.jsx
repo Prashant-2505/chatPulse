@@ -15,7 +15,7 @@ const ENDPOINT = 'http://localhost:5000'
 var socket, selectedChatComapre
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-    const { user, selectedChat, setSelectedChat } = ChatState()
+    const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState()
     const [messages, setMessages] = useState([])
     const [newMessages, setNewMessages] = useState()
     const [loading, setLoading] = useState(false)
@@ -104,7 +104,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     useEffect(() => {
         socket.on('message recieved', (newMessageRecieved) => {
             if (!selectedChatComapre || selectedChatComapre._id !== newMessageRecieved.chat._id) {
-                // notification
+                if (!notification.includes(newMessageRecieved)) {
+                    setNotification([...notification,newMessageRecieved])
+                    setFetchAgain(!fetchAgain)
+                }
             }
             else {
                 setMessages([...messages, newMessageRecieved])
@@ -117,22 +120,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     const typingHandler = (e) => {
         setNewMessages(e.target.value);
-    
+
         if (!socketConnected) return;
-    
+
         clearTimeout(typingTimeout);
-    
+
         if (!typing) {
             setTyping(true);
             socket.emit('typing', selectedChat._id);
         }
-    
+
         typingTimeout = setTimeout(() => {
             socket.emit('stop typing', selectedChat._id);
             setTyping(false);
         }, 3000);
     };
-    
+
 
 
     return (
