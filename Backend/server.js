@@ -6,6 +6,7 @@ const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 const path = require('path');
+const cors = require('cors');
 
 dotenv.config();
 connectDB();
@@ -24,7 +25,7 @@ app.use('/api/message', messageRoutes);
 const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname1, 'frontend', 'build'))); // Use __dirname directly
+  app.use(cors(express.static(path.join(__dirname1, 'frontend', 'build')))); // Use __dirname directly
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname1, 'frontend', 'build', 'index.html')); // Use __dirname directly
   });
@@ -76,9 +77,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("user discected");
     // Handle user disconnection logic here
-    socket.leave(userData._id);
+    //  socket.leave(user._id);
   });
 });
 
