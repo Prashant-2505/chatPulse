@@ -5,9 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node Backend/server.js",
-    "server": "nodemon server.js",
-    "client": "npm start --prefix ./frontend",
-    "dev": "concurrently \"npm run start\" \"npm run client\""
+    "server": "nodemon Backend/server.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Prashant sharma",
   "license": "ISC",
