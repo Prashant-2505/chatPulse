@@ -25,7 +25,7 @@
     "socket.io-client": "^4.7.2",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
+  "scripts": {  
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
