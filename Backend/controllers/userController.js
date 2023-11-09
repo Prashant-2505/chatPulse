@@ -75,7 +75,7 @@ const allUsers = asyncHandler(async (req, res) => {
     const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
     console.log(req.user._id)
     console.log('poka')
-    res.send(users);
+    res.json(users);
 });
 
 module.exports = { authUser, registerUser, allUsers }
