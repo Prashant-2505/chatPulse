@@ -33,18 +33,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 const config = {
                     headers: {
                         Authorization: `Bearer ${user.token}`,
+                        'Content-Type': 'application/json'
                     },
                 };
 
                 setNewMessages("")
-                const { data } = await axios.post(`/api/message`, {
+                const { data } = await axios.post(`http://localhost:5000/api/message`, {
                     content: newMessages,
                     chatId: selectedChat._id
                 }, config)
 
                 socket.emit('new message', data)
                 setMessages([...messages, data])
-                console.log(data)
             } catch (error) {
                 toast({
                     title: 'Error Occurred',
@@ -68,7 +68,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 },
             };
             setLoading(true)
-            const { data } = await axios.get(`/api/message/${selectedChat._id}`, config)
+            const { data } = await axios.get(`http://localhost:5000/api/message/${selectedChat._id}`, config)
             setMessages(data)
             setLoading(false)
 
@@ -85,6 +85,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
     }
 
+    // socket intailization
     useEffect(() => {
         socket = io(ENDPOINT)
         socket.emit('setup', user)
@@ -96,16 +97,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     }, [])
 
+
     useEffect(() => {
         fetchMessages()
         selectedChatComapre = selectedChat
     }, [selectedChat])
 
+        // recieved message
     useEffect(() => {
         socket.on('message recieved', (newMessageRecieved) => {
             if (!selectedChatComapre || selectedChatComapre._id !== newMessageRecieved.chat._id) {
                 if (!notification.includes(newMessageRecieved)) {
-                    setNotification([...notification,newMessageRecieved])
+                    setNotification([...notification, newMessageRecieved])
                     setFetchAgain(!fetchAgain)
                 }
             }
