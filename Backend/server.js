@@ -23,18 +23,24 @@ app.use('/api/message', messageRoutes);
 
 //!-------------Deployment ------------------------
 
-// const __dirname1 = path.resolve();
+const __dirname1 = path.resolve();
 
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(cors(express.static(path.join(__dirname1, 'frontend', 'build')))); // Use __dirname directly
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname1, 'frontend', 'build', 'index.html')); // Use __dirname directly
-//   });
-// } else {
-//   app.get('/', (req, res) => {
-//     res.json('API is running');
-//   });
-// }
+if (process.env.NODE_ENV === 'production') {
+  // Apply cors middleware separately
+  app.use(cors());
+
+  // Serve static files from the 'build' directory
+  app.use(express.static(path.join(__dirname1, 'frontend', 'build')));
+
+  // Handle any other routes by serving the index.html
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname1, 'frontend', 'build', 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.json('API is running');
+  });
+}
 
 //!----------------------------------------------
 

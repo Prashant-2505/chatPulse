@@ -46,7 +46,7 @@ const SideBar = () => {
         try {
             setLoading(true);
 
-            const response = await axios.get(`http://localhost:5000/api/user?search=${search}`, {
+            const response = await axios.get(`/api/user?search=${search}`, {
                 headers: {
                     Authorization: `Bearer ${user.token}`,
                 },
@@ -79,7 +79,7 @@ const SideBar = () => {
                 }
             }
 
-            const { data } = await axios.post('http://localhost:5000/api/chat', { userId }, config)
+            const { data } = await axios.post('/api/chat', { userId }, config)
             setSelectedChat(data)
             setLoadingChat(false)
             onClose()
