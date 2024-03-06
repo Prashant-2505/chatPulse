@@ -119,7 +119,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     })
 
 
-    let typingTimeout;
+    let typingTimeout = 2000;
 
     const typingHandler = (e) => {
         setNewMessages(e.target.value);

@@ -52,30 +52,32 @@ const io = require('socket.io')(server, {
   },
 });
 
+
+// connection created
 io.on("connection", (socket) => {
   console.log(`connected to socket.io`)
 
-
+// logged in user join socket room
   socket.on('setup', (userData) => {
     socket.join(userData._id)
     socket.emit("connected")
   })
 
 
-
+// the person user want to chat also join socket room
   socket.on('join chat', (room) => {
     socket.join(room)
     console.log("user joined" + room)
   })
 
 
-
+ // get message from socket server
   socket.on('new message', (newMessageRecieved) => {
     var chat = newMessageRecieved.chat
     if (!chat.users) {
       console.log("chat users not defined")
     }
-
+// if its grp chat chat then send message to all users ecpect one who sending 
     chat.users.forEach(user => {
       if (user._id == newMessageRecieved.sender._id) return
 
@@ -85,7 +87,7 @@ io.on("connection", (socket) => {
   )
 
 
-
+// socket for typing
   socket.on('typing', (room) => {
   socket.in(room).emit('typing')
   })
