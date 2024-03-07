@@ -12,7 +12,8 @@ import ScrollableChat from './ScrollableChat'
 import io from 'socket.io-client'
 
 const ENDPOINT = 'http://localhost:5000'
-var socket, selectedChatComapre
+const socket = io('http://localhost:5000', { transports: ['websocket'] });
+var  selectedChatComapre
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState()
