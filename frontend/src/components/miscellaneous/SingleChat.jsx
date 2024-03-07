@@ -12,8 +12,7 @@ import ScrollableChat from './ScrollableChat'
 import io from 'socket.io-client'
 
 const ENDPOINT = 'http://localhost:5000'
-const socket = io('http://localhost:5000', { transports: ['websocket'] });
-var  selectedChatComapre
+var socket, selectedChatComapre
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState()
@@ -88,7 +87,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     // socket intailization
     useEffect(() => {
-        socket = io(ENDPOINT)
+        socket = io(ENDPOINT,{ transports: ['websocket'] })
         socket.emit('setup', user)
         socket.on('connected', () => {
             setSocketConnected(true)
