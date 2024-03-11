@@ -26,11 +26,10 @@ app.use('/api/message', messageRoutes);
 const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
-  // Apply cors middleware separately
   app.use(cors({
-    origin: 'https://chatpulse-w2g5.onrender.com/',
+    origin: 'https://chatpulse-w2g5.onrender.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, // enable set cookie
+    credentials: true,
   }));
 
   // Serve static files from the 'build' directory
@@ -57,7 +56,10 @@ const server = app.listen(port, () => {
 
 const io = require('socket.io')(server, {
   pingTimeout: 60000,
- 
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
 
 });
 
