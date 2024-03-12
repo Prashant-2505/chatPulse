@@ -27,7 +27,7 @@ const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
   app.use(cors({
-    origin: 'https://chatpulse-w2g5.onrender.com',
+    origin: 'http://localhost:3000/',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }));
