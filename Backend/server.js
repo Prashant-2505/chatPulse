@@ -27,7 +27,7 @@ const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
   app.use(cors({
-    origin: 'http://localhost:3000/',
+    origin: ['http://localhost:3000', 'https://chatpulse-w2g5.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }));
@@ -57,9 +57,8 @@ const server = app.listen(port, () => {
 const io = require('socket.io')(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ['http://localhost:3000', 'https://chatpulse-w2g5.onrender.com'],
+    origin: 'https://chatpulse-w2g5.onrender.com',
     methods: ['GET', 'POST'],
-    credentials: true,
   },
 
 });
