@@ -57,8 +57,9 @@ const server = app.listen(port, () => {
 const io = require('socket.io')(server, {
   pingTimeout: 60000,
   cors: {
-    origin: 'https://chatpulse-w2g5.onrender.com',
+    origin: ['http://localhost:3000', 'https://chatpulse-w2g5.onrender.com'],
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 
 });
