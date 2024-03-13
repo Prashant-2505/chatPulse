@@ -14,18 +14,21 @@ connectDB();
 const app = express();
 app.use(express.json());
 
+// CORS configuration
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://chatpulse-w2g5.onrender.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 app.use('/api/user/', userRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
 
-
-
-//!-------------Deployment ------------------------
-
+// Deployment setup
 const __dirname1 = path.resolve();
-
 if (process.env.NODE_ENV === 'production') {
-
   // Serve static files from the 'build' directory
   app.use(express.static(path.join(__dirname1, 'frontend', 'build')));
 
@@ -39,14 +42,11 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-//!----------------------------------------------
-
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
-
 
 const io = require('socket.io')(server, {
   pingTimeout: 60000,
@@ -54,59 +54,48 @@ const io = require('socket.io')(server, {
     origin: 'https://chatpulse-w2g5.onrender.com',
     methods: ['GET', 'POST'],
   },
-
 });
 
-
-// connection created
+// Connection created
 io.on("connection", (socket) => {
-  console.log(`connected to socket.io`)
+  console.log(`Connected to socket.io`);
 
-// logged in user join socket room
+  // Logged in user join socket room
   socket.on('setup', (userData) => {
-    socket.join(userData._id)
-    socket.emit("connected")
-  })
+    socket.join(userData._id);
+    socket.emit("connected");
+  });
 
-
-// the person user want to chat also join socket room
+  // The person user wants to chat also join socket room
   socket.on('join chat', (room) => {
-    socket.join(room)
-    console.log("user joined" + room)
-  })
+    socket.join(room);
+    console.log("User joined" + room);
+  });
 
-
- // get message from socket server
+  // Get message from socket server
   socket.on('new message', (newMessageRecieved) => {
-    var chat = newMessageRecieved.chat
+    const chat = newMessageRecieved.chat;
     if (!chat.users) {
-      console.log("chat users not defined")
+      console.log("Chat users not defined");
     }
-// if its grp chat chat then send message to all users ecpect one who sending 
+    // If it's a group chat, send message to all users except the sender
     chat.users.forEach(user => {
-      if (user._id == newMessageRecieved.sender._id) return
+      if (user._id == newMessageRecieved.sender._id) return;
+      socket.in(user._id).emit("message recieved", newMessageRecieved);
+    });
+  });
 
-      socket.in(user._id).emit("message recieved", newMessageRecieved)
-    })
-  }
-  )
-
-
-// socket for typing
+  // Socket for typing
   socket.on('typing', (room) => {
-  socket.in(room).emit('typing')
-  })
+    socket.in(room).emit('typing');
+  });
 
   socket.on('stop typing', (room) => {
-    socket.in(room).emit('stop typing')
-    })
+    socket.in(room).emit('stop typing');
+  });
 
-
-
-    // turn socket off
-    socket.off('setup',()=>{
-      console.log("user disconnected")
-      socket.leave(userData._id)
-    })
-})
-
+  // Turn socket off
+  socket.on('disconnect', () => {
+    console.log("User disconnected");
+  });
+});
