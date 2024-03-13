@@ -27,11 +27,7 @@ const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
   // Apply cors middleware separately
-  app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, // enable set cookie
-  }));
+  app.use(cors());
 
   // Serve static files from the 'build' directory
   app.use(express.static(path.join(__dirname1, 'frontend', 'build')));
