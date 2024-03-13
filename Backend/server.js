@@ -26,11 +26,7 @@ app.use('/api/message', messageRoutes);
 const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(cors({
-    origin: ['http://localhost:3000', 'https://chatpulse-w2g5.onrender.com'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  }));
+  app.use(cors());
 
   // Serve static files from the 'build' directory
   app.use(express.static(path.join(__dirname1, 'frontend', 'build')));
