@@ -13,7 +13,6 @@ connectDB();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 
 app.use('/api/user/', userRoutes);
 app.use('/api/chat', chatRoutes);
@@ -26,7 +25,6 @@ app.use('/api/message', messageRoutes);
 const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(cors());
 
   // Serve static files from the 'build' directory
   app.use(express.static(path.join(__dirname1, 'frontend', 'build')));
