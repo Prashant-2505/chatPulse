@@ -4,7 +4,6 @@ const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes');
-const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 const path = require('path');
 const cors = require('cors');
 
@@ -25,6 +24,18 @@ app.use('/api/message', messageRoutes);
 const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
+
+
+  // Add Access Control Allow Origin headers
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
   // Apply cors middleware separately
   app.use(cors({
     origin: ['https://chatpulse-w2g5.onrender.com', 'http://localhost:3000'],
