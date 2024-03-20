@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === 'production') {
 
   // Apply cors middleware separately
   app.use(cors({
-    origin:  'http://localhost:3000',
+    origin: 'https://chatpulse-w2g5.onrender.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // enable set cookie
 }));
