@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === 'production') {
 
   // Apply cors middleware separately
   app.use(cors({
-    origin: ['https://chatpulse-w2g5.onrender.com/', 'http://localhost:3000'],
+    origin:  'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // enable set cookie
 }));
@@ -64,7 +64,6 @@ const server = app.listen(port, () => {
 
 const io = require('socket.io')(server, {
   pingTimeout: 60000,
- 
 
 });
 
